@@ -19,6 +19,9 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.enableCors({
+    origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }

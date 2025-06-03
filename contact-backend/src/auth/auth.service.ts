@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -52,31 +56,39 @@ export class AuthService {
   async generateToken(user: User): Promise<[string, string]> {
     const payload: JwtPayload = { username: user.username, sub: user.name };
 
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refresh_token = this.jwtService.sign(payload, { expiresIn: '7d' });
 
     await this.prisma.user.update({
       where: { username: user.username },
-      data: { token: refreshToken },
+      data: { token: refresh_token },
     });
 
-    return [accessToken, refreshToken];
+    return [access_token, refresh_token];
   }
 
   async login(username: string, password: string) {
     const user = await this.validateUser(username, password);
     if (!user) throw new UnauthorizedException('Invalid Credentials');
 
-    const [accessToken, refreshToken] = await this.generateToken(user);
+    const [access_token, refresh_token] = await this.generateToken(user);
 
-    return { accessToken, refreshToken, expiresIn: 900 };
+    await this.prisma.user.update({
+      where: { username: user.username },
+      data: {
+        token: refresh_token,
+      },
+    });
+
+    return { access_token, refresh_token, expiresIn: 900 };
   }
 
-  async refreshToken(username: string, refreshToken: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { username: username },
+  async refreshToken(refreshToken: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { token: refreshToken },
     });
-    if (!user || user.token !== refreshToken) {
+
+    if (!user) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
@@ -87,9 +99,16 @@ export class AuthService {
       throw new UnauthorizedException(`Refresh token error: ${errMsg}`);
     }
 
-    const [accessToken, newRefreshToken] = await this.generateToken(user);
+    const [access_token, newRefreshToken] = await this.generateToken(user);
 
-    return { accessToken, refreshToken: newRefreshToken, expiresIn: 900 };
+    await this.prisma.user.update({
+      where: { username: user.username },
+      data: {
+        token: newRefreshToken,
+      },
+    });
+
+    return { access_token, refresh_token: newRefreshToken, expiresIn: 900 };
   }
 
   async logout(username: string) {

@@ -17,6 +17,11 @@ export interface UserPublic {
     name: string
 }
 
+export interface TokenResponse {
+    access_token: string
+    refresh_token: string
+}
+
 export interface Contact {
     id: number
     first_name: string

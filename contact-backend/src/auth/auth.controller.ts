@@ -46,10 +46,7 @@ export class AuthController {
     description: 'Refreshes new access & refresh tokens',
   })
   async refresh(@Body() dto: RefreshTokenDto) {
-    const newToken = await this.authService.refreshToken(
-      dto.username,
-      dto.refreshToken,
-    );
+    const newToken = await this.authService.refreshToken(dto.refreshToken);
     return successResponse(newToken, 'Token Refresh success');
   }
 

@@ -6,24 +6,29 @@ import SubmitButton from "@/app/components/SubmitButton";
 import RedirectLink from "@/app/components/RedirectLink";
 import {userLogin} from "@/lib/api/UserApi";
 import {ApiResponse, isSuccess} from "@/lib/types/api-response";
-import {UserPublic} from "@/lib/types/entities";
-import {alert_error, alert_success} from "@/lib/alert";
+import { TokenResponse} from "@/lib/types/entities";
+import {alert_error} from "@/lib/alert";
 import {useRouter} from "next/navigation";
+import {useLocalStorage} from "react-use";
 
 export default function LoginPage() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [, setToken] = useLocalStorage<string | null>("token");
+    const [, setRefreshToken] = useLocalStorage<string | null>("refresh_token");
     const router = useRouter();
+
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
         const response = await userLogin(username, password);
-        const responseBody = await response.json() as ApiResponse<UserPublic>;
+        const responseBody = await response.json() as ApiResponse<TokenResponse>;
 
         if (isSuccess(responseBody)) {
-            await alert_success(responseBody.message);
-            router.push('/');
+            setToken(responseBody.data.access_token);
+            setRefreshToken(responseBody.data.refresh_token);
+            router.push('/dashboard');
         } else {
             await alert_error(responseBody.error.message);
         }

@@ -40,13 +40,6 @@ export class LoginDto {
 
 export class RefreshTokenDto {
   @IsString()
-  @MinLength(3)
-  @MaxLength(100)
-  @IsNotEmpty()
-  @ApiProperty()
-  username!: string;
-
-  @IsString()
   @IsNotEmpty()
   @ApiProperty()
   refreshToken!: string;

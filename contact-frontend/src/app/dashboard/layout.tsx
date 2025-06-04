@@ -1,15 +1,15 @@
 import {ReactNode} from "react";
 import AuthGuard from "@/app/dashboard/utils/auth-guard";
+import Header from "@/app/dashboard/components/header";
+import Footer from "@/app/dashboard/components/footer";
 
-interface LayoutProps {
-    children: ReactNode;
-}
 
-export default function Layout({children}: LayoutProps) {
+export default function DashboardLayout({children}: {children: ReactNode}) {
     return (
-        <>
-            INI LAYOUT DASHBOARD
-            <AuthGuard>{children}</AuthGuard>
-        </>
+            <div className='min-h-screen flex flex-col'>
+                <Header/>
+                <AuthGuard>{children}</AuthGuard>
+                <Footer/>
+            </div>
     )
 }

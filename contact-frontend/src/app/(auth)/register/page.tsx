@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import {FormEvent, useState} from "react";
 import {alert_error, alert_success} from "@/lib/alert";
 import {userRegister} from "@/lib/api/UserApi";
@@ -10,6 +9,7 @@ import {UserPublic} from "@/lib/types/entities";
 import FormField from "@/app/components/formField";
 import SubmitButton from "@/app/components/SubmitButton";
 import RedirectLink from "@/app/components/RedirectLink";
+import Swal from "sweetalert2";
 
 export default function RegisterPage() {
     const [username, setUsername] = useState<string>('');
@@ -32,6 +32,7 @@ export default function RegisterPage() {
 
         if (isSuccess(responseBody)) {
             await alert_success(responseBody.message);
+            Swal.close();
             router.push('/login');
         } else {
             await alert_error(responseBody.error.message);

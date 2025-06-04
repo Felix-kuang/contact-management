@@ -22,6 +22,7 @@ export default function AuthGuard({children}: { children: React.ReactNode }) {
 
             if (isTokenExpired(token)) {
                 try {
+                    console.log("Expired token, trying to refresh");
                     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
                         method: 'POST',
                         headers: {"Content-Type": "application/json"},

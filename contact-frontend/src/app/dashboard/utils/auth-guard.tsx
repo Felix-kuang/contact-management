@@ -2,12 +2,12 @@
 
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {isTokenExpired} from "@/app/dashboard/utils/auth";
 import {ApiResponse, isSuccess} from "@/lib/types/api-response";
 import {TokenResponse} from "@/lib/types/entities";
 
-export default function AuthGuard({children}: { children: React.ReactNode }) {
+export default function AuthGuard({children}: { children: ReactNode }) {
     const router = useRouter();
     const [token, setToken] = useLocalStorage<string | null>('token');
     const [refreshToken, setRefreshToken] = useLocalStorage<string | null>('refresh_token');

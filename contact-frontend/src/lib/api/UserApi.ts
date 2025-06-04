@@ -23,3 +23,44 @@ export const userLogin = async (username: string, password: string) => {
         })
     })
 }
+
+export const changeName = async (token: string, {name}: { name: string }) => {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/name`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            name
+        })
+    })
+}
+
+export const changePassword = async (
+    token: string, {password, newPassword}: { password: string, newPassword: string }
+) => {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/password`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            password, newPassword
+        })
+    })
+}
+
+export const currentUser = async (token: string) => {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/current`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+}

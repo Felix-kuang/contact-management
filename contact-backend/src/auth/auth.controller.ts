@@ -21,7 +21,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'Register new user' })
   async register(@Body() dto: RegisterDto) {
     const user = await this.authService.register(
-      dto.username,
+      dto.username.toLowerCase(),
       dto.password,
       dto.name,
     );
@@ -35,7 +35,10 @@ export class AuthController {
     description: 'Login successful, returns access & refresh tokens',
   })
   async login(@Body() dto: LoginDto) {
-    const user = await this.authService.login(dto.username, dto.password);
+    const user = await this.authService.login(
+      dto.username.toLowerCase(),
+      dto.password,
+    );
     return successResponse(user, 'Login success');
   }
 

@@ -3,7 +3,7 @@ import { JwtAuthGuard } from '@app/auth/jwt.guard';
 import { UserService } from '@app/user/user.service';
 import { RequestWithUser } from '@app/auth/interface/request_with_user';
 import { successResponse } from '@app/util/response.util';
-import { UpdateUserDto } from '@app/user/dto/user.dto';
+import { UpdatePasswordDto, UpdateUserDto } from '@app/user/dto/user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
@@ -20,11 +20,26 @@ export class UserController {
     return successResponse(user, 'Current user fetched');
   }
 
-  @Patch('current')
+  @Patch('name')
   @ApiOperation({ summary: 'Update current user information' })
   @ApiResponse({ status: 200, description: 'Update current user information' })
   async updateUser(@Req() req: RequestWithUser, @Body() dto: UpdateUserDto) {
     const updatedUser = await this.userService.updateUser(
+      req.user.username,
+      dto,
+    );
+
+    return successResponse(updatedUser, 'User updated successfully');
+  }
+
+  @Patch('password')
+  @ApiOperation({ summary: 'Update current user information' })
+  @ApiResponse({ status: 200, description: 'Update current user information' })
+  async updateUserPassword(
+    @Req() req: RequestWithUser,
+    @Body() dto: UpdatePasswordDto,
+  ) {
+    const updatedUser = await this.userService.changePassword(
       req.user.username,
       dto,
     );

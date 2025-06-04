@@ -37,7 +37,6 @@ export default function LoginPage() {
     }
 
     return (
-
         <div
             className='animate-fade-in bg-gray-800 opacity-80 p-8 rounded-xl shadow-custom border border-gray-700 backdrop-blur-sm w-full max-w-md'>
             <div className='text-center mb-8'>

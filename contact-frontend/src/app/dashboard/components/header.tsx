@@ -27,6 +27,14 @@ export default function Header() {
                                 <span>Log out</span>
                             </Link>
                         </li>
+                        {/*<li>*/}
+                        {/*    <Link*/}
+                        {/*        href='/dashboard/users/logout'*/}
+                        {/*        className='text-gray-100 hover:text-white flex items-center transition-colors duration-200'>*/}
+                        {/*        <i className='fas fa-sign-out mr-2'></i>*/}
+                        {/*        <span>Log out</span>*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                     </ul>
                 </nav>
             </div>

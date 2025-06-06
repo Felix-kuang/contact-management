@@ -54,6 +54,17 @@ export const changePassword = async (
     })
 }
 
+export const logoutUser = async (token: string) => {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+}
+
 export const currentUser = async (token: string) => {
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/current`, {
         method: 'GET',
